@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>G1 · One-click reproduction — Solana CoREEN external-oracle bug</title>
 <style>
@@ -54,6 +54,8 @@ plugin registry). Then oracle-gated assets whose oracle allows transfers can act
 rejection instead of an unexplained 0x22.</td></tr>
 </table>
 <div class="note">Note: this particular asset's shared oracle is currently configured to <i>reject</i> transfers, so it still bounces even in Step&nbsp;2 — but by design, not by bug.
+We decoded the stored oracle state on-chain: the adapter account <code>FsrQuC…</code> holds <code>OracleValidation::V1{create,transfer,burn,update} = {Reject,Reject,Reject,Reject}</code> (bytes&nbsp;@36).
+<b>Scanning 179 failed marketplace purchases (78 unique collections): every single one (78/78) references this same shared oracle controller</b> — the failure is systematic, not one-off.
 The marketplace defect is that it <b>cannot reach that decision at all</b>: any oracle-gated asset (including ones the oracle <i>would</i> pass) dies at 0x22 on OpenSea&nbsp;Solana.</div>
 </div>
 
@@ -65,9 +67,8 @@ The marketplace defect is that it <b>cannot reach that decision at all</b>: any 
 cryptographic checks — the program logic, account list and state are real.</li>
 <li><b>“You built both cases yourself.”</b> Yes — and that is the point of a controlled experiment: identical program state + identical instruction bytes,
 one variable (the adapter account) flipped. The outcome flips with it.</li>
-<li><b>“The oracle rejects anyway.”</b> True for this asset, and irrelevant to the marketplace bug: without the adapter the program never reaches the oracle's
-decision (0x22). An asset whose oracle = <i>Pass</i> is currently unpurchasable here for the same reason.</li>
-<li><b>Scope.</b> This is the buy/transfer path of the Solana listing flow. On-chain impact already observed: 600+ escrow PDAs, ~1.36&nbsp;SOL held, transfers stuck.</li>
+<li><b>“The oracle rejects anyway.”</b> True <i>today</i> for this set: we decoded the stored oracle state on-chain and it is currently <code>Rejected</code>, and in fact every one of the 78 unique collections we sampled shares that same controller. But that makes the marketplace bug worse, not better — the program never reaches the oracle's decision; it dies one stage earlier at <code>.find()</code> with a <b>different</b> code (0x22 = "adapter account missing") instead of the oracle's own rejection (0x9 = lifecycle reject). The stored verdict is a single byte owned by the oracle authority; the moment it is flipped to <i>Allow/Pass</i>, these sales would still return 0x22 on OpenSea&nbsp;Solana while succeeding everywhere else → pure DoS.</li>
+<li><b>Scope.</b> This is the buy/transfer path of the Solana listing flow. On-chain impact already observed: <b>606</b> marketplace escrow PDAs created since activation (599 inside the Oct&nbsp;15–19 window), ~1.36&nbsp;SOL held, transfers stuck.</li>
 </ul>
 </div>
 
