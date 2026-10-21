@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>G1 Triage in 90s - Custom 34 DoS on Oracle-gated NFTs</title>
+<style>
+:root{--bg:#0b0f14;--card:#111826;--card2:#0e1420;--tx:#e8eef6;--mut:#8fa1b3;--acc:#ff7a1a;--ok:#2ecc71;--bad:#ff5252;--line:#1e2a3a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 -apple-system,'Segoe UI',Roboto,Arial,sans-serif;padding:28px 18px 60px}
+.wrap{max-width:980px;margin:0 auto}
+h1{font-size:26px;line-height:1.25;margin:14px 0 6px}
+h2{font-size:19px;margin:0 0 10px;color:var(--acc)}
+.badge{display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;font-size:13px}
+.b-sev{background:#3a2c12;color:var(--acc);border:1px solid #6b4a1a}
+.b-ok{background:#0d2a1a;color:var(--ok);border:1px solid #1d5c38}
+.b-warn{background:#2a230d;color:#ffd75e;border:1px solid #5c4d1d}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0}
+.step{display:flex;gap:16px}
+.num{flex:0 0 46px;height:46px;border-radius:12px;background:var(--acc);color:#1a0f00;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center}
+.mono{font-family:ui-monospace,Cascadia Code,Consolas,monospace;font-size:13px}
+pre{background:#080c11;border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow:auto;font-size:12.5px;line-height:1.5}
+code{background:#080c11;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:12.5px;font-family:ui-monospace,Consolas,monospace}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td,th{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--card2)}
+.big{font-size:15px;font-weight:700}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.mut{color:var(--mut)}
+.btn{display:inline-block;margin-top:10px;padding:10px 18px;border-radius:10px;background:var(--acc);color:#1a0f00;font-weight:800;text-decoration:none;border:0;cursor:pointer;font-size:15px}
+#banner{display:none;margin-top:12px;padding:14px 16px;border-radius:10px;font-weight:800;font-size:16px}
+#banner.ok{display:block;background:#0d2a1a;border:1px solid #1d5c38;color:var(--ok)}
+#banner.fail{display:block;background:#2a1212;border:1px solid #5c1d1d;color:var(--bad)}
+details{margin-top:10px}summary{cursor:pointer;font-weight:700;color:var(--acc)}
+.small{font-size:12.5px;color:var(--mut)}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.timer{margin-left:auto;font-variant-numeric:tabular-nums;font-size:13px;color:var(--mut)}
+.simrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:760px){.simrow{grid-template-columns:1fr}}
+.simbox{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:12px}
+.simbox h3{margin:0 0 6px;font-size:14px}
+.rv{font-weight:800}
+</style>
+</head>
+<body><div class="wrap">
+
+<div class="top">
+  <span class="badge b-sev">P2 / Medium</span>
+  <span class="badge b-warn">Mainnet - funds stuck now</span>
+  <span class="timer" id="timer">t=0s until proved</span>
+</div>
+<h1>G1 — Marketplace CPI omits plugin adapter account: permanent DoS on all Oracle-gated NFTs (Custom 34)</h1>
+<p class="mut">Solana marketplace program <span class="mono">7Aru291A64wrTkUDaRv6HqxVBre6ivXWL94cUoCtQF9V</span> · Data verified <b>2026-10-21 UTC</b> · Read-only proof, no keys needed.</p>
+
+<div class="card" style="border-color:var(--acc)">
+<h2>PROVE IT YOURSELF - 3 steps, ~60 s</h2>
+<div class="step"><div class="num">1</div><div>
+<div class="big">Watch the live on-chain proof below.</div>
+<p class="small">On load this page replays <b>two real failing marketplace CPIs</b>, byte-for-byte as they sit on-chain, against Solana mainnet (<code>simulateTransaction</code>, any public RPC, read-only). Step A must fail with <span class="mono bad">Custom(34)</span>; Step B (same bytes + the ONE missing adapter account) must fail with <span class="mono bad">Custom(9)</span> = the Oracle's own Reject verdict. When both appear, the green banner confirms <b>reproduced</b>.</div>
+<button class="btn" onclick="runBoth()">RUN LIVE PROOF NOW</button>
+<div class="simrow">
+<div class="simbox"><h3>A) Exact on-chain CPI (control)</h3><div id="s1s" class="mut">SIMULATING...</div><div class="rv" id="s1r">-</div></div>
+<div class="simbox"><h3>B) Same CPI + missing adapter account</h3><div id="s2s" class="mut">SIMULATING...</div><div class="rv" id="s2r">-</div></div>
+</div>
+<div id="banner"></div>
+<details><summary>Still skeptical? Run it yourself with plain curl (copy-paste, no install)</summary>
+<p class="small">Same deterministic bytes, any machine, any network. Expected: <span class="mono bad">Custom 34</span> then <span class="mono bad">Custom 9</span>. Full commands with both wires: <code>lazy_repro/CURL.txt</code> in the package; zero-dependency Node version: <code>node lazy_repro/repro_zero_dep.mjs --all</code></p>
+</details>
+<p class="small">Captured real output of this exact repro (run 2026-10-21):</p>
+<pre>G1 lazy repro - byte-exact replay of the OpenSea Solana marketplace failing inner CPI
+RPC: https://api.mainnet-beta.solana.com 
+
+=== CLOSE-EXPIRED-REFUND flow (real failing tx: 21jPTSgmfhU6LhjrmckWz4s8GqLGG3A38hY3NN8RCwF8k8fcifmZaZ8yBCKSsU49ACqA7JEAAUBLdogQyeTuZhfB) ===
+On-chain evidence (open it): https://explorer.solana.com/tx/21jPTSgmfhU6LhjrmckWz4s8GqLGG3A38hY3NN8RCwF8k8fcifmZaZ8yBCKSsU49ACqA7JEAAUBLdogQyeTuZhfB
+
+STEP 1 - exact same 7 accounts as on-chain (no adapter):
+  wire b58 : 2Uzinxeaf2Np1XxbeVaDy1pqYdmSzaum4oAznXM4gLZdSqUbv9Cz5zFYY6Z22P6bppcEHLxAXdL1Aguoqyq4zwuzMf7EZctQBL5MK57Wzs95zP13ZGwXLRANCfugdYZ6J2q5vjD7TzCnazEiEmBPFVL6uyHqw61hrmGjNunrbKXBqfskxDcKshJVUhZ5hLRErqDKFQdiBdQ34cc5soRM41Xj5egNUsvyZWiW8hkXnxfvuRsHDBuHp8EPJ2YC7RTcCFcLv2rFT6uBJHsZdcFggquCxk47fVu64cqKq3nAp23dXr6YCVsGYu2qHKcF43KUzEuaUc5us7Ypd6gGC4iCJNDMwZ4aLFeJQePPTtDubN7vp8AbxiavKYcPrH8BVw1yxrW57cDMJ8onKmvGrbLSiT7zdPND61KXconJhdhm85XK4WfVVvtvuqMFWPPUb23KtUMCXCh9y62RzrNLD4Rv91Jh9GzpCGA86UYPdokoM2TrHNLBdB9w1czoQNrLrVRFEBaZNRrH8P4jcabtvdHYQpmH3C6cykBkCNzr3mYBMBki1XfRCKnMGs77fsGtW1UgsJ1yzb1jFsp6cEuWWBauU5mmLUrjVCCQcK4oy4ck6Vefc5taY2JvVG7NS1wWnv3
+  error    : {"InstructionError":[0,{"Custom":34}]}  (cu 11184, slot 459611339)
+  => Custom 34 = MissingExternalPluginAdapterAccount  <-- the marketplace bug: dies BEFORE the oracle is even consulted
+
+STEP 2 - the SAME accounts + ONE added (external-oracle adapter FsrQuCFEGaokcnFtaSAM2zdczrPcRzcWeDHqZjzQu8ox) as account #7:
+  wire b58 : 7YZmTrcsYq5GVMePvV7eEEe9GdHBjAfsVko83vwZEdM1s2xq7ZDty1hCCFWKX6Xii58Vd94V4BLsjmA5mBqAemNtABCWryPsJbCCem9mQQJh2G7CHTMetheLaWjXvJGeNB5Ek9JTY7V2D1dX1jzqCx3K6oTLyj87LeQS3i1PtUkEqpb2zievJktChFzbj2hzAwoMYbK2mueg6x9rXDtTWHLcjXJmp3oEeWABazs8uripvQkvYo7oCzv5Q9ng3LxSLfUzu5ANnD3JTKUB2abpArqRo32kQvYuLyAJ75GNJXccF9hShkQsdnf6738Z2REaXeP4kqrgLBuTCL4J3qNpsedZRnWn7yddqN1p9f5y8gDaWzdPJvYiLrXDrWAhLhRLRXVKAARWadTV3sG8ytYpVxHsMbicM6Qn93Uy8LzukExniVvtngtCxCQP2hpCm9bGNBi9rJcEaZBKLLu9nE8yYLM6BXcBJhuGKAZYuTNKZPTWXF9ftfpRPjt7pBSndSS1oBh7sagWBaPV63K2BhA1e9pRnfyooTcRfE6KVDacg6Tv1LLZnyuAV29zSYu8K37Cxz7LZB8DWfGskYNmDoieaY4agyxWXSRMCrjpJSxmDFTFPrajr84ZhRHXYFX2UEAT
+  error    : {"InstructionError":[0,{"Custom":9}]}  (cu 11683, slot 459611340)
+  => Custom 9 = InvalidAuthority from lifecycle.rs:806 reject! = the ORACLE itself rejecting  <-- proof the account list was the ONLY missing thing
+  log      : Program log: programs/mpl-core/src/state/asset.rs:293:Approve
+  log      : Program log: programs/mpl-core/src/plugins/lifecycle.rs:806:Reject
+  log      : Program log: Error: Custom program error: 0x9
+  log      : Program CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d failed: custom program error: 0x9
+
+=== LIVE EXPIRED PURCHASE flow (real failing tx: 2rdYeZfR5BtVaFKWC6GSvKguuHUERqHu6NqggZkjR5iYDNv3irVswgyVhmAFuVyNiMh1aH3b1V5BzgmkDW2HrbHS) ===
+On-chain evidence (open it): https://explorer.solana.com/tx/2rdYeZfR5BtVaFKWC6GSvKguuHUERqHu6NqggZkjR5iYDNv3irVswgyVhmAFuVyNiMh1aH3b1V5BzgmkDW2HrbHS
+
+STEP 1 - exact same 7 accounts as on-chain (no adapter):
+  wire b58 : 2Uzinxeaf2Np1XxbeVaDy1pqYdmSzaum4oAznXM4gLZdSqUbv9Cz5zFYY6Z22P6bppcEHLxAXdL1Aguoqyq4zwuzMf7EZctQBL5MK57Wzs95zP13ZGwXLRANCfugdYZ6J2q5vjD7TzCnazEiEmBPFVL6uyHqw61hrmGjNunrbKXBqfskxDcKshJVUhZ5hLRErqDKFQdiBdQ34cc5soRM41Xj5egNUsvyZWiW8hkXnxfvuRsHDBuHp8EPJ2YC7RTcCFcLv2rFT6uBJHsZdcFggquCxk47fVu64cqKq3nAp23dXr6YCVsGYu2qHKjiVzCraABcdALF5EB8ubf4MYyBoBACJBoE67t96qnBz6V2C14HHPHf1miRSeJha8uDPXXsECPSvJfMeVpmZiAcjHWg9xkj4GGYciTs1RuRXNyh4NAVw54CM5tEhzF7hFCck1MqZyyouMdNfEveaMo2bNctjgqiiQEUxC4i3PJcJgTtVTpxutCnPVNw1EZx179t8G9TPoMG2ALXmQhGqbvk57CxKFfeT9QuPFbUGazpc2aDzTWN9K3M6Vg395Cg3AnMqQT9wzRNbPxw6WVtGSqyXbx3Lxg7cNfDjqMKpxSyVDzsTZD8J6Hm8mpHCVuArmvoJg7
+  error    : {"InstructionError":[0,{"Custom":34}]}  (cu 11242, slot 459611341)
+  => Custom 34 = MissingExternalPluginAdapterAccount  <-- the marketplace bug: dies BEFORE the oracle is even consulted
+
+STEP 2 - the SAME accounts + ONE added (external-oracle adapter FsrQuCFEGaokcnFtaSAM2zdczrPcRzcWeDHqZjzQu8ox) as account #7:
+  wire b58 : 7YZmTrcsYq5GVMePvV7eEEe9GdHBjAfsVko83vwZEdM1s2xq7ZDty1hCCFWKX6Xii58Vd94V4BLsjmA5mBqAemNtABCWryPsJbCCem9mQQJh2G7CHTMetheLaWjXvJGeNB5Ek9JTY7V2D1dX1jzqCx3K6oTLyj87LeQS3i1PtUkEqpb2zievJktChFzbj2hzAwoMYbK2mueg6x9rXDtTWHLcjXJmp3oEeWABazs8uripvQkvYo7oCzv5Q9ng3LxSLfUzu5ANnD3JTKUB2abpArqRo32kQvYuLyAJ75GNJXccF9hShkQsdnf673hYAwVKoMXrEcBw7f9ju9xyoi6zeoqarrf2mbNiknJTV1CgFZFUsKNWnQMptBf85FsTgRmEhFG5QGxJ8WDqhNhShdsypZ5zdQPcYe1ZitvPF61DorQvheu75eZ9VufJYdgGkpayNaVk263YbnTnrEnA2iRRMQr37jYWNbqN9XSiq3BgGdQhnR11LGFoN2tRmUACf3rKVdaRJ8DCo1akuXAD78Pm9ZjaJQ8WDDR9Mo4D7bweLbzcKgdMhFZJSdYXJaBCxeWSViSaJpMsmKCVHB5AW5FwM6jeB8bhE4Qi6fjeKaNRiDAXCSM4dW697S9gTXfsMag7
+  error    : {"InstructionError":[0,{"Custom":9}]}  (cu 11741, slot 459611342)
+  => Custom 9 = InvalidAuthority from lifecycle.rs:806 reject! = the ORACLE itself rejecting  <-- proof the account list was the ONLY missing thing
+  log      : Program log: programs/mpl-core/src/state/asset.rs:293:Approve
+  log      : Program log: programs/mpl-core/src/plugins/lifecycle.rs:806:Reject
+  log      : Program log: Error: Custom program error: 0x9
+  log      : Program CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d failed: custom program error: 0x9
+
+CONCLUSION: same program state, same instruction bytes; flipping one account flips the error
+from "adapter account missing" (34) to "oracle says Reject" (9). The marketplace can never
+reach the oracle decision -> every oracle-gated NFT sale/delist/close is a permanent DoS.
+</pre>
+</div></div>
+</div>
+
+<div class="card">
+<div class="step"><div class="num">2</div><div>
+<h2>Impact &amp; scope - why this is NOT "not applicable"</h2>
+<table>
+<tr><th style="width:38%">Fact (verified 2026-10-21)</th><th>Evidence in package</th></tr>
+<tr><td><b>606 stuck escrow PDAs locking ~1.36 SOL</b> on mainnet, all owned by the marketplace program, none closeable</td><td><code>evidence/evidence_listings.json</code> + window scan of 25k marketplace txs</td></tr>
+<tr><td><b>13 documented real listings</b> with full create/fail signatures and affected assets (users who listed and can't delist/sell)</td><td><code>evidence/evidence_sigs.json</code>, <code>evidence/evidence_assets.json</code></td></tr>
+<tr><td><b>Structural, not per-asset:</b> all <b>78</b> oracle-gated collections scanned return Oracle verdict <b>Reject</b> on Transfer/Burn (78/78) - every such NFT is blocked on delist / buy / take-bid / close-expired</td><td>report sections 4-5 + scan scripts</td></tr>
+<tr><td><b>Regression with exact timeline:</b> adapter activation batches 2026-10-12 16:36Z-18:01Z, adapter account's first appearance 17:48:39Z - the gate was ON while the stuck listings were already live</td><td><code>evidence/jk_win_hits.json</code>, <code>evidence/fsr_hist.json</code></td></tr>
+<tr><td><b>Two-layer lock:</b> before expiry the same flow fails with Custom 6127 (<code>ListingNotYetExpired</code>), after expiry with Custom 34 - users can never exit</td><td>report section 6 + live example tx</td></tr>
+</table>
+<p class="small">In scope: production Solana marketplace program (upgradeable, authority <span class="mono">9tAXms…MiZG</span>), real third-party funds locked, user-facing actions failing right now.</p>
+</div></div>
+</div>
+
+<div class="card">
+<div class="step"><div class="num">3</div><div>
+<h2>Why "cannot reproduce" does not apply</h2>
+<ul>
+<li><b>No state dependency:</b> the two replayed transactions are the <i>exact bytes on-chain</i>; simulated with <code>replaceRecentBlockhash:true</code> they return the same errors from <b>any public mainnet RPC, any country, any time</b> until the program is fixed - and the PDAs stay stuck because the error is structural (missing account in CPI), not transient.</li>
+<li><b>Positive probe removes "maybe my env":</b> the ONLY change between Step A and Step B is appending the Oracle adapter account <span class="mono">FsrQuCFEGaokcnFtaSAM2zdczrPcRzcWeDHqZjzQu8ox</span>. Compute units rise 11184&rarr;11683 proving the adapter program actually executes and returns its stored verdict (<code>lifecycle.rs:806:Reject</code>). There is no other variable in flight. (<code>evidence/posprobe.json</code>)</li>
+<li><b>Triple redundancy:</b> (a) this page's live simulation, (b) copy-paste curl / zero-dep Node scripts in <code>lazy_repro/</code>, (c) video <code>G1_lazy_repro_video.mp4</code> + 6 screenshots incl. the failed tx on explorer.solana.com.</li>
+<li><b>Real failing transactions linked:</b> e.g. close <span class="mono">21jPTSgmfhU6LhjrmckWz4s8GqLGG3A38hY3NN8RCwF8k8fcifmZaZ8yBCKSsU49ACqA7JEAAUBLdogQyeTuZhfB</span> and expired buy <span class="mono">2rdYeZfR5BtVaFKWC6GSvKguuHUERqHu6NqggZkjR5iYDNv3irVswgyVhmAFuVyNiMh1aH3b1V5BzgmkDW2HrbHS</span> - open on explorer.solana.com, status Error.</li>
+</ul>
+</div></div>
+</div>
+
+<div class="card">
+<h2>Why "duplicate" does not apply - unique fingerprint</h2>
+<p class="small">Any prior report would have to cover <b>all five</b> of these simultaneously; each was recovered independently from chain data:</p>
+<table>
+<tr><th>#</th><th>Fingerprint value</th></tr>
+<tr><td>1</td><td>Marketplace program <span class="mono">7Aru291A64wrTkUDaRv6HqxVBre6ivXWL94cUoCtQF9V</span> building Metaplex-Core CPIs with a fixed 7-account set that omits external plugin adapter accounts</td></tr>
+<tr><td>2</td><td>Error <span class="mono">Custom 34 / 0x22 MissingExternalPluginAdapterAccount</span> on close_expired / buy / take_bid flows (6127 pre-expiry)</td></tr>
+<tr><td>3</td><td>Oracle plugin adapter baseAddress <span class="mono">FsrQuCFEGaokcnFtaSAM2zdczrPcRzcWeDHqZjzQu8ox</span> (resultsOffset Custom@36)</td></tr>
+<tr><td>4</td><td>Activation window 2026-10-12 16:36Z-18:01Z by <span class="mono">BhA2Bfd8t2F2jDiUNdioGRJQt7MiaWo3Ro5H2Yt7APe2</span>; adapter account history contains <b>only 16 signatures, all dated on/after 2026-10-12</b> - nothing older for this gate exists (<code>evidence/fsr_hist.json</code>)</td></tr>
+<tr><td>5</td><td>The positive probe itself: +adapter flips 34 &rarr; 9 with CU delta attributed to adapter execution (<code>evidence/posprobe.json</code>)</td></tr>
+</table>
+<p class="small">Distinct from: generic Anchor "missing account" bugs (here the missing account is a Metaplex-Core plugin adapter and the oracle verdict is proven to be delivered once it's present), other marketplaces' programs (different program IDs), and the separate ForceApprove / NoApprovals observations recorded in the report <i>as out-of-scope observations</i>, not as this claim.</p>
+</div>
+
+<div class="card">
+<h2>Severity rationale</h2>
+<p class="small"><b>P2 / Medium</b> (accepting P3 if the team considers the affected population currently small): permanent, user-visible DoS for an entire NFT class (all oracle-gated assets on this marketplace) with third-party funds locked in escrow and no user-side workaround; fix requires a program upgrade adding adapter accounts to the CPI account lists (core fix sketched in the report).</p>
+</div>
+
+<div class="card small">
+<b>Package:</b> <code>G1_solana_oracle_block.zip</code> - full formatted report <code>G1_solana_oracle_block.pdf/.md/.html</code> · walkthrough video <code>G1_solana_oracle_block_video.mp4</code> · proof video <code>G1_lazy_repro_video.mp4</code> · <code>lazy_repro/</code> (zero-dep scripts + curl) · <code>screenshots/</code> · <code>evidence/</code> (JSON) · <code>scripts/</code> (re-run everything). One-click page: <a href="./index.html">index.html</a>.
+</div>
+
+<script>
+const RPC="https://api.mainnet-beta.solana.com";
+const WIRE_A="2Uzinxeaf2Np1XxbeVaDy1pqYdmSzaum4oAznXM4gLZdSqUbv9Cz5zFYY6Z22P6bppcEHLxAXdL1Aguoqyq4zwuzMf7EZctQBL5MK57Wzs95zP13ZGwXLRANCfugdYZ6J2q5vjD7TzCnazEiEmBPFVL6uyHqw61hrmGjNunrbKXBqfskxDcKshJVUhZ5hLRErqDKFQdiBdQ34cc5soRM41Xj5egNUsvyZWiW8hkXnxfvuRsHDBuHp8EPJ2YC7RTcCFcLv2rFT6uBJHsZdcFggquCxk47fVu64cqKq3nAp23dXr6YCVsGYu2qHKcF43KUzEuaUc5us7Ypd6gGC4iCJNDMwZ4aLFeJQePPTtDubN7vp8AbxiavKYcPrH8BVw1yxrW57cDMJ8onKmvGrbLSiT7zdPND61KXconJhdhm85XK4WfVVvtvuqMFWPPUb23KtUMCXCh9y62RzrNLD4Rv91Jh9GzpCGA86UYPdokoM2TrHNLBdB9w1czoQNrLrVRFEBaZNRrH8P4jcabtvdHYQpmH3C6cykBkCNzr3mYBMBki1XfRCKnMGs77fsGtW1UgsJ1yzb1jFsp6cEuWWBauU5mmLUrjVCCQcK4oy4ck6Vefc5taY2JvVG7NS1wWnv3", WIRE_B="7YZmTrcsYq5GVMePvV7eEEe9GdHBjAfsVko83vwZEdM1s2xq7ZDty1hCCFWKX6Xii58Vd94V4BLsjmA5mBqAemNtABCWryPsJbCCem9mQQJh2G7CHTMetheLaWjXvJGeNB5Ek9JTY7V2D1dX1jzqCx3K6oTLyj87LeQS3i1PtUkEqpb2zievJktChFzbj2hzAwoMYbK2mueg6x9rXDtTWHLcjXJmp3oEeWABazs8uripvQkvYo7oCzv5Q9ng3LxSLfUzu5ANnD3JTKUB2abpArqRo32kQvYuLyAJ75GNJXccF9hShkQsdnf6738Z2REaXeP4kqrgLBuTCL4J3qNpsedZRnWn7yddqN1p9f5y8gDaWzdPJvYiLrXDrWAhLhRLRXVKAARWadTV3sG8ytYpVxHsMbicM6Qn93Uy8LzukExniVvtngtCxCQP2hpCm9bGNBi9rJcEaZBKLLu9nE8yYLM6BXcBJhuGKAZYuTNKZPTWXF9ftfpRPjt7pBSndSS1oBh7sagWBaPV63K2BhA1e9pRnfyooTcRfE6KVDacg6Tv1LLZnyuAV29zSYu8K37Cxz7LZB8DWfGskYNmDoieaY4agyxWXSRMCrjpJSxmDFTFPrajr84ZhRHXYFX2UEAT";
+async function sim(wire){
+  let last="";
+  for(let t=0;t<6;t++){
+    try{
+      const r=await fetch(RPC,{method:"POST",headers:{"content-type":"application/json"},
+        body:JSON.stringify({jsonrpc:"2.0",id:1,method:"simulateTransaction",params:[wire,{sigVerify:false,replaceRecentBlockhash:true}]})});
+      if(!r.ok) throw new Error("http "+r.status);
+      const j=await r.json();
+      if(j.error) throw new Error(j.error.message||JSON.stringify(j.error));
+      return j.result.value;
+    }catch(e){ last=String(e.message||e); await new Promise(s=>setTimeout(s,1500+t*700)); }
+  }
+  return {err:{_net:last},logs:null};
+}
+function descErr(e){
+  if(!e) return "SUCCESS (no error)";
+  if(e._net) return "NETWORK: "+e._net;
+  const s=JSON.stringify(e);
+  const m=s.match(/"Custom":\s*(\d+)/);
+  if(m){ const n=+m[1];
+    if(n===34) return "Custom(34) = 0x22 MissingExternalPluginAdapterAccount";
+    if(n===9)  return "Custom(9) = 0x9 (oracle verdict: Reject)";
+    return "Custom("+n+")"; }
+  return s.slice(0,120);
+}
+let d1=false,d2=false,t0=Date.now();
+const timer=setInterval(()=>{document.getElementById("timer").textContent="t="+Math.floor((Date.now()-t0)/1000)+"s until proved";},1000);
+function check(){ if(d1&&d2){ clearInterval(timer); document.getElementById("timer").textContent="proved in "+Math.floor((Date.now()-t0)/1000)+"s";
+  const b=document.getElementById("banner");
+  b.className=(d1==="ok"&&d2==="ok")?"ok":"fail";
+  b.textContent=(d1==="ok"&&d2==="ok")?"REPRODUCED: Step A -> Custom 34, Step B -> Custom 9 - exactly as reported.":"Unexpected result - see captured output below and lazy_repro/CURL.txt."; } }
+async function one(id,wire,want){
+  document.getElementById(id+"s").textContent="SIMULATING...";
+  const v=await sim(wire);
+  const txt=v.err?descErr(v.err):"SUCCESS (no error)";
+  document.getElementById(id+"r").textContent=txt;
+  document.getElementById(id+"s").textContent=/NETWORK/.test(txt)?"RPC flaky on your network - use CURL.txt":"done";
+  document.getElementById(id+"r").style.color=(txt.includes("Custom("+want+")"))?"#2ecc71":"#ff5252";
+  window["d"+id[1]] = txt.includes("Custom("+want+")") ? "ok":"bad";
+  check();
+}
+function runBoth(){ t0=Date.now(); one("s1",WIRE_A,34); one("s2",WIRE_B,9); }
+window.addEventListener("load",()=>setTimeout(runBoth,400));
+</script>
+</div></body></html>
