@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>G1 Triage in 90s - Custom 34 DoS on Oracle-gated NFTs</title>
+<title>G1 Triage in 90s - Custom 34: Oracle-gated NFTs locked on OpenSea Solana Marketplace</title>
 <style>
 :root{--bg:#0b0f14;--card:#111826;--card2:#0e1420;--tx:#e8eef6;--mut:#8fa1b3;--acc:#ff7a1a;--ok:#2ecc71;--bad:#ff5252;--line:#1e2a3a}
 *{box-sizing:border-box}
@@ -48,7 +48,7 @@ details{margin-top:10px}summary{cursor:pointer;font-weight:700;color:var(--acc)}
   <span class="badge b-warn">Mainnet - funds stuck now</span>
   <span class="timer" id="timer">t=0s until proved</span>
 </div>
-<h1>G1 — Marketplace CPI omits plugin adapter account: permanent DoS on all Oracle-gated NFTs (Custom 34)</h1>
+<h1>G1 — Marketplace CPI omits plugin adapter account: Oracle-gated NFTs permanently unsellable, escrow SOL locked (Custom 34)</h1>
 <p class="mut">Solana marketplace program <span class="mono">7Aru291A64wrTkUDaRv6HqxVBre6ivXWL94cUoCtQF9V</span> · Data verified <b>2026-10-21 UTC</b> · Read-only proof, no keys needed.</p>
 
 <div class="card" style="border-color:var(--acc)">
@@ -153,7 +153,17 @@ reach the oracle decision -> every oracle-gated NFT sale/delist/close is a perma
 
 <div class="card">
 <h2>Severity rationale</h2>
-<p class="small"><b>P2 / Medium</b> (accepting P3 if the team considers the affected population currently small): permanent, user-visible DoS for an entire NFT class (all oracle-gated assets on this marketplace) with third-party funds locked in escrow and no user-side workaround; fix requires a program upgrade adding adapter accounts to the CPI account lists (core fix sketched in the report).</p>
+<p class="small"><b>P2 / Medium</b> (accepting P3 if the team considers the affected population currently small): permanent lockout of an entire NFT class (all oracle-gated assets on this marketplace) with third-party funds locked in escrow and no user-side workaround; fix requires a program upgrade adding adapter accounts to the CPI account lists (core fix sketched in the report).</p>
+</div>
+
+<div class="card">
+<h2>Bugcrowd program compliance (OpenSea brief)</h2>
+<ul>
+<li><b>In-scope target, exact match:</b> filed against <b>OpenSea Solana Marketplace Program</b> (<span class="mono">7Aru291A64wrTkUDaRv6HqxVBre6ivXWL94cUoCtQF9V</span>) - impact purely on-chain against that program, per the brief.</li>
+<li><b>Not the out-of-scope "DoS" item:</b> no attacker action, rate or payload is required - the deployed program structurally omits required accounts in its Metaplex-Core CPIs, so every gated sale flow fails deterministically for all users, permanently locking escrow funds (broken core functionality / funds-lock; closest VRT fit: Impact on Availability of user funds &amp; marketplace functionality).</li>
+<li><b>No production impact from testing:</b> read-only public RPC calls only (<code>getTransaction</code> / <code>getAccountInfo</code> / <code>simulateTransaction</code>); no state written by us, no third-party accounts touched.</li>
+<li><b>One root cause, first disclosure:</b> all 78 collections / 606 PDAs share the single defect above (one bounty applies); reported to OpenSea via Bugcrowd only.</li>
+</ul>
 </div>
 
 <div class="card small">
