@@ -201,7 +201,8 @@ async function one(id,wire,want){
   document.getElementById(id+"r").textContent=txt;
   document.getElementById(id+"s").textContent=/NETWORK/.test(txt)?"RPC flaky on your network - use CURL.txt":"done";
   document.getElementById(id+"r").style.color=(txt.includes("Custom("+want+")"))?"#2ecc71":"#ff5252";
-  window["d"+id[1]] = txt.includes("Custom("+want+")") ? "ok":"bad";
+  const res=txt.includes("Custom("+want+")")?"ok":"bad";
+  if(id==="s1") d1=res; else d2=res;
   check();
 }
 function runBoth(){ t0=Date.now(); one("s1",WIRE_A,34); one("s2",WIRE_B,9); }
