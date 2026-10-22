@@ -68,7 +68,7 @@ cryptographic checks — the program logic, account list and state are real.</li
 <li><b>“You built both cases yourself.”</b> Yes — and that is the point of a controlled experiment: identical program state + identical instruction bytes,
 one variable (the adapter account) flipped. The outcome flips with it.</li>
 <li><b>“The oracle rejects anyway.”</b> True <i>today</i> for this set: we decoded the stored oracle state on-chain and it is currently <code>Rejected</code>, and in fact every one of the 78 unique collections we sampled shares that same controller. But that makes the marketplace bug worse, not better — the program never reaches the oracle's decision; it dies one stage earlier at <code>.find()</code> with a <b>different</b> code (0x22 = "adapter account missing") instead of the oracle's own rejection (0x9 = lifecycle reject). The stored verdict is a single byte owned by the oracle authority; the moment it is flipped to <i>Allow/Pass</i>, these sales would still return 0x22 on OpenSea&nbsp;Solana while succeeding everywhere else → pure DoS.</li>
-<li><b>Scope.</b> This is the buy/transfer path of the Solana listing flow. On-chain impact already observed: <b>606</b> marketplace escrow PDAs created since activation (599 inside the Oct&nbsp;15–19 window), ~1.36&nbsp;SOL held, transfers stuck.</li>
+<li><b>Scope.</b> This is the buy/transfer path of the Solana listing flow. On-chain impact already observed: <b>600</b> confirmed-stuck marketplace escrow PDAs (599 inside the Oct&nbsp;15–19 window + 1 documented outside it), ~1.36&nbsp;SOL escrowed, transfers stuck.</li>
 </ul>
 </div>
 

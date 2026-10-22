@@ -115,7 +115,7 @@ reach the oracle decision -> every oracle-gated NFT sale/delist/close is a perma
 <h2>Impact &amp; scope - why this is NOT "not applicable"</h2>
 <table>
 <tr><th style="width:38%">Fact (verified 2026-10-21)</th><th>Evidence in package</th></tr>
-<tr><td><b>606 stuck escrow PDAs locking ~1.36 SOL</b> on mainnet, all owned by the marketplace program, none closeable</td><td><code>evidence/evidence_listings.json</code> + window scan of 25k marketplace txs</td></tr>
+<tr><td><b>600 confirmed-stuck escrow PDAs locking ~1.36 SOL</b> on mainnet, all owned by the marketplace program, none closeable</td><td><code>evidence/evidence_stuck_pdas.json</code> (one row per PDA, each with its failing <code>Custom 34</code> tx signature) + window scan of 25k marketplace txs</td></tr>
 <tr><td><b>13 documented real listings</b> with full create/fail signatures and affected assets (users who listed and can't delist/sell)</td><td><code>evidence/evidence_sigs.json</code>, <code>evidence/evidence_assets.json</code></td></tr>
 <tr><td><b>Structural, not per-asset:</b> all <b>78</b> oracle-gated collections scanned return Oracle verdict <b>Reject</b> on Transfer/Burn (78/78) - every such NFT is blocked on delist / buy / take-bid / close-expired</td><td>report sections 4-5 + scan scripts</td></tr>
 <tr><td><b>Regression with exact timeline:</b> adapter activation batches 2026-10-12 16:36Z-18:01Z, adapter account's first appearance 17:48:39Z - the gate was ON while the stuck listings were already live</td><td><code>evidence/jk_win_hits.json</code>, <code>evidence/fsr_hist.json</code></td></tr>
@@ -162,7 +162,7 @@ reach the oracle decision -> every oracle-gated NFT sale/delist/close is a perma
 <li><b>In-scope target, exact match:</b> filed against <b>OpenSea Solana Marketplace Program</b> (<span class="mono">7Aru291A64wrTkUDaRv6HqxVBre6ivXWL94cUoCtQF9V</span>) - impact purely on-chain against that program, per the brief.</li>
 <li><b>Not the out-of-scope "DoS" item:</b> no attacker action, rate or payload is required - the deployed program structurally omits required accounts in its Metaplex-Core CPIs, so every gated sale flow fails deterministically for all users, permanently locking escrow funds (broken core functionality / funds-lock; closest VRT fit: Impact on Availability of user funds &amp; marketplace functionality).</li>
 <li><b>No production impact from testing:</b> read-only public RPC calls only (<code>getTransaction</code> / <code>getAccountInfo</code> / <code>simulateTransaction</code>); no state written by us, no third-party accounts touched.</li>
-<li><b>One root cause, first disclosure:</b> all 78 collections / 606 PDAs share the single defect above (one bounty applies); reported to OpenSea via Bugcrowd only.</li>
+<li><b>One root cause, first disclosure:</b> all 78 collections / 600 confirmed PDAs share the single defect above (one bounty applies); reported to OpenSea via Bugcrowd only.</li>
 </ul>
 </div>
 
